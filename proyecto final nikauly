@@ -1,0 +1,92 @@
+prestamos = []
+
+# Aplicación de gestión de préstamos
+while True:
+    print("\n----- MENÚ PRINCIPAL -----")
+    print("A. Registrar un nuevo préstamo")
+    print("B. Ver historial de préstamos")
+    print("C. Buscar préstamos por nombre")
+    print("D. Marcar préstamo como pagado")
+    print("E. Resumen de préstamos")
+    print("F. Salir")
+
+    opcion = input("Ingrese la opción a elegir: ").upper()
+
+    if opcion == "A":
+        print("\n---- REGISTRO DEL NUEVO PRÉSTAMO ----")
+        nombre = input("Ingrese el nombre del cliente: ")
+        monto_texto = input("Ingrese el monto del préstamo: ")
+        try:
+            monto = float(monto_texto)
+        except ValueError:
+            print("Monto inválido. Debe ser un número.")
+            continue
+        fecha_de_prestamo = input("Fecha del préstamo: ")
+
+        prestamos.append({
+            "nombre": nombre,
+            "monto_de_prestamo": monto,
+            "fecha_de_prestamo": fecha_de_prestamo,
+            "estado": "pendiente"
+        })
+
+        print("Préstamo registrado de manera exitosa.")
+
+    elif opcion == "B":
+        print("\n--- HISTORIAL DE PRÉSTAMOS ---")
+        if len(prestamos) == 0:
+            print("No hay préstamos registrados.\n")
+        else:
+            for p in prestamos:
+                print(f"Nombre del cliente: {p['nombre']}")
+                print(f"Monto del préstamo: {p['monto_de_prestamo']}")
+                print(f"Fecha del préstamo: {p['fecha_de_prestamo']}")
+                print(f"Estado del préstamo: {p['estado']}")
+                print("-" * 40)
+
+    elif opcion == "C":
+        print("\n---- BUSCAR PRÉSTAMOS POR NOMBRE ----")
+        nombre_buscar = input("Ingrese el nombre del cliente: ")
+        encontrados = False
+        for p in prestamos:
+            if p["nombre"].lower() == nombre_buscar.lower():
+                print(f"Nombre del cliente: {p['nombre']}")
+                print(f"Monto del préstamo: {p['monto_de_prestamo']}")
+                print(f"Fecha del préstamo: {p['fecha_de_prestamo']}")
+                print(f"Estado del préstamo: {p['estado']}")
+                print("-" * 40)
+                encontrados = True
+        if not encontrados:
+            print("No se encontraron préstamos para este cliente.")
+
+    elif opcion == "D":
+        print("\n--- MARCAR PRÉSTAMO COMO PAGADO ---")
+        nombre_buscar = input("Ingrese el nombre del cliente: ")
+        encontrados = False
+        for p in prestamos:
+            if p["nombre"].lower() == nombre_buscar.lower() and p["estado"] == "pendiente":
+                print(f"Nombre del cliente: {p['nombre']}")
+                print(f"Monto del préstamo: {p['monto_de_prestamo']}")
+                print(f"Fecha del préstamo: {p['fecha_de_prestamo']}")
+                print(f"Estado actual del préstamo: {p['estado']}")
+                confirmacion = input("¿Desea marcar este préstamo como pagado? (SI/NO): ")
+                if confirmacion.upper() == "SI":
+                    p["estado"] = "pagado"
+                    print("Préstamo  pagado con éxito.")
+                encontrados = True
+        if not encontrados:
+            print("No se encontró préstamo pendiente que corresponda a ese nombre.")
+
+    elif opcion == "E":
+        print("\n--- RESUMEN DE PRÉSTAMOS ---")
+        total_prestado = sum(p["monto_de_prestamo"] for p in prestamos)
+        total_pendiente = sum(p["monto_de_prestamo"] for p in prestamos if p["estado"] == "pendiente")
+        print(f"Total prestado: {total_prestado}")
+        print(f"Total pendiente: {total_pendiente}")
+
+    elif opcion == "F":
+        print("Saliendo del programa...")
+        break
+
+    else:
+        print("Opción no válida. Por favor intente nuevamente.")
